@@ -33,8 +33,8 @@ function Chat() {
 
 export default function Chats() {
   return (
-    <section className="flex max-h-[96vh] flex-col pt-12 px-3">
-      <div className="flex-1 ">
+    <section className="flex flex-col pt-12 px-3">
+      <div className="flex-1 overflow-y">
         <Chat />
         <Chat />
         <Chat />
