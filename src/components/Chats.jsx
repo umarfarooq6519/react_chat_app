@@ -4,7 +4,7 @@ import star from "../assets/star.svg";
 
 function Chat() {
   return (
-    <span className="chat flex items-center py-4">
+    <span className="chat max-w-2xl flex items-center py-4">
       <div className="avatar">
         <div className="w-14 rounded-full">
           <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />

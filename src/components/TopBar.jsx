@@ -3,7 +3,7 @@ import archive from "../assets/archive.svg";
 
 export default function TopBar() {
   return (
-    <section className="fixed bg-base-100 z-50 top-0 flex w-full justify-between items-center px-5 py-3 ">
+    <section className="fixed bg-base-100 max-w-2xl z-50 top-0 flex w-full justify-between items-center px-5 py-3 ">
       <div className="flex justify-between items-center w-full ">
         <img src={user_group} alt="contacts" className="w-6 h-6" />
         <h1 className="font-semibold text-xl font-[khand]">RECENT MESSAGES</h1>

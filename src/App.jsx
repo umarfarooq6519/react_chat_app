@@ -4,7 +4,7 @@ import TopBar from "./components/TopBar";
 
 function App() {
   return (
-    <section className="max-w-lg text-lg min-h-screen">
+    <section className="md:flex  justify-center h-screen text-lg min-h-screen">
       <TopBar />
       <Chats />
       <BottomBar />
