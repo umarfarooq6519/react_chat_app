@@ -27,64 +27,41 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// // #################### SignOut ####################
-// const SignOut = ({ username }) => {
-//   // Sign out of google
-//   const handleSignout = () => {
-//     signOut(auth)
-//       .then(() => {
-//         console.log("Signed out successfully");
-//       })
-//       .catch((error) => {
-//         console.log("Error -> " + error);
-//       });
-//   };
-
-//   return (
-//     <section>
-//       <button onClick={handleSignout}>Sign Out</button>
-//       <p>User: {username ? username : "Signed out"}</p>
-//     </section>
-//   );
-// };
-
-// // #################### SignIn ####################
-// const SignIn = () => {
-//   // Calls google login page
-//   const onSubmit = async (e) => {
-//     e.preventDefault();
-//     const user = await signInWithPopup(auth, provider);
-//     console.log(user);
-//   };
-
-//   return (
-//     <section>
-//       <button onClick={onSubmit}>Sign in with Google</button>
-//     </section>
-//   );
-// };
-
 // #################### App ####################
 function App() {
+  // Current User info states
+  const [currentUser, setCurrentUser] = useState(null);
   const [userName, setUserName] = useState(null);
+  const [userPhoto, setUserPhoto] = useState(null);
 
   useEffect(() => {
     return onAuthStateChanged(auth, (user) => {
       if (user) {
+        setCurrentUser(user);
         setUserName(user.displayName);
+        setUserPhoto(user.photoURL);
         console.log("AuthStateChange: Signed in " + user.email);
       } else {
         setUserName(null);
+        setCurrentUser(null);
         console.log("AuthStateChange: Signed out");
       }
     });
   }, []);
 
   return (
-    <section className="h-screen flex flex-col gap-3 justify-center items-center">
-      <p>User: {userName ? userName : "Signed out"}</p>
-      <SignIn auth={auth} provider={provider} />
-      <SignOut auth={auth} />
+    <section className="h-screen bg-neutral p-3 text-base-100 text-base flex gap-3 justify-center items-center">
+      <div className="sidebar flex-1 md:max-w-60 lg:max-w-xs h-full">
+        {currentUser ? (
+          <SignOut auth={auth} userPhoto={userPhoto} userName={userName} />
+        ) : (
+          <SignIn auth={auth} provider={provider} />
+        )}
+      </div>
+
+      <div className="chat-content rounded-xl bg-base-100 text-base-content flex-1 flex justify-center items-center h-full">
+        {currentUser ? "Start a Chat!" : "Please Login to continue!"}
+      </div>
     </section>
   );
 }
