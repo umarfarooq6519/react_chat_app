@@ -1,6 +1,7 @@
 // import { useId } from "react";
 import check from "../assets/check.svg";
 import star from "../assets/star.svg";
+import LoginPage from "./LoginPage";
 
 function Chat() {
   return (
@@ -38,6 +39,7 @@ export default function Chats() {
         <Chat />
         <Chat />
         <Chat />
+        <LoginPage />
       </div>
     </section>
   );
