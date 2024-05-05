@@ -2,7 +2,7 @@ import { signOut } from "firebase/auth";
 import Button from "./elements/Button";
 
 // #################### SignOut ####################
-function SignOut({ auth, userPhoto, userName }) {
+function SignedIn({ auth, userPhoto, userName }) {
   // Sign out of google
   const handleSignout = () => {
     signOut(auth)
@@ -44,17 +44,13 @@ function SignOut({ auth, userPhoto, userName }) {
         </div>
       </div>
 
-      <span className="sidebar-footer flex flex-col gap-3">
-        <Button text="Settings" icon={<i className="fa-solid fa-gear mr-2"></i>} />
-
-        <Button
-          onclick={handleSignout}
-          text="Sign out"
-          icon={<i className="fa-solid fa-arrow-right-from-bracket mr-2"></i>}
-        />
-      </span>
+      <Button
+        onclick={handleSignout}
+        text="Sign out"
+        icon={<i className="fa-solid fa-arrow-right-from-bracket mr-2"></i>}
+      />
     </section>
   );
 }
 
-export default SignOut;
+export default SignedIn;

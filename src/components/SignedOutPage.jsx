@@ -1,7 +1,7 @@
 import { signInWithPopup } from "firebase/auth";
 
 // #################### SignIn ####################
-function SignIn({ auth, provider }) {
+function SignedOut({ auth, provider }) {
   // Calls google login page
   const handleSignin = async (e) => {
     e.preventDefault();
@@ -27,4 +27,4 @@ function SignIn({ auth, provider }) {
   );
 }
 
-export default SignIn;
+export default SignedOut;

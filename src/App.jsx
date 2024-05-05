@@ -7,8 +7,9 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
 } from "firebase/auth";
-import SignIn from "./components/SignInPage";
-import SignOut from "./components/SignoutPage";
+import SignedOut from "./components/SignedOutPage";
+import SignedIn from "./components/SignedInPage";
+import EmptyChat from "./components/EmptyChat";
 
 // Firebase Config
 const firebaseConfig = {
@@ -53,14 +54,14 @@ function App() {
     <section className="h-screen bg-neutral p-3 text-base-100 text-base flex gap-3 justify-center items-center">
       <div className="sidebar flex-1 md:max-w-60 lg:max-w-xs h-full">
         {currentUser ? (
-          <SignOut auth={auth} userPhoto={userPhoto} userName={userName} />
+          <SignedIn auth={auth} userPhoto={userPhoto} userName={userName} />
         ) : (
-          <SignIn auth={auth} provider={provider} />
+          <SignedOut auth={auth} provider={provider} />
         )}
       </div>
 
-      <div className="chat-content rounded-xl bg-base-100 text-base-content flex-1 flex justify-center items-center h-full">
-        {currentUser ? "Start a Chat!" : "Please Login to continue!"}
+      <div className="chat-content p-3 lg:px-5 rounded-xl bg-base-100 text-base-content flex-1 flex justify-center items-center h-full">
+        {currentUser ? <EmptyChat /> : "Please Login to continue."}
       </div>
     </section>
   );
