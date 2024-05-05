@@ -1,18 +1,8 @@
-// ########## Components ############
-import Chats from "./components/Chats";
-// import BottomBar from "./components/BottomBar";
-// import TopBar from "./components/TopBar";
-
-// ########## firebase ############
+// Firebase imports
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
-import { useAuthState } from "react-firebase-hooks/auth";
-// import { useCollectionData } from "react-firebase-hooks/firestore";
-import LoginPage from "./components/LoginPage";
-
-// Your web app's Firebase configuration
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyB_BG_bB1JrUoJvq-d8c-RMS9dn1eAjNfw",
   authDomain: "chatapp52-c4bd1.firebaseapp.com",
@@ -22,21 +12,32 @@ const firebaseConfig = {
   appId: "1:805566105982:web:ad6813e37b627a60dd4b2f",
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+// Initialize Firebase Authentication
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-function App() {
-  const auth = getAuth(app);
-  // const db = getFirestore(app);
-
-  const [user] = useAuthState(auth);
+// #################### SignIn ####################
+function SignIn() {
+  // Calls google login page
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const user = await signInWithPopup(auth, provider);
+  };
 
   return (
-    <section className="md:flex justify-center text-[1.1em] min-h-screen">
-      {user ? <Chats /> : <LoginPage />}
+    <section>
+      <button onClick={onSubmit}>Sign in with Google</button>
+    </section>
+  );
+}
 
-      {/* <TopBar />
-      <Chats />
-      <BottomBar /> */}
+// #################### App ####################
+function App() {
+  return (
+    <section>
+      <SignIn />
     </section>
   );
 }
