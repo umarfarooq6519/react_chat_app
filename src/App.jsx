@@ -1,6 +1,14 @@
-// Firebase imports
+import { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  // signOut,
+  // signInWithPopup,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+} from "firebase/auth";
+import SignIn from "./components/SignInPage";
+import SignOut from "./components/SignoutPage";
 
 // Firebase Config
 const firebaseConfig = {
@@ -14,30 +22,69 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
 // Initialize Firebase Authentication
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// #################### SignIn ####################
-function SignIn() {
-  // Calls google login page
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const user = await signInWithPopup(auth, provider);
-  };
+// // #################### SignOut ####################
+// const SignOut = ({ username }) => {
+//   // Sign out of google
+//   const handleSignout = () => {
+//     signOut(auth)
+//       .then(() => {
+//         console.log("Signed out successfully");
+//       })
+//       .catch((error) => {
+//         console.log("Error -> " + error);
+//       });
+//   };
 
-  return (
-    <section>
-      <button onClick={onSubmit}>Sign in with Google</button>
-    </section>
-  );
-}
+//   return (
+//     <section>
+//       <button onClick={handleSignout}>Sign Out</button>
+//       <p>User: {username ? username : "Signed out"}</p>
+//     </section>
+//   );
+// };
+
+// // #################### SignIn ####################
+// const SignIn = () => {
+//   // Calls google login page
+//   const onSubmit = async (e) => {
+//     e.preventDefault();
+//     const user = await signInWithPopup(auth, provider);
+//     console.log(user);
+//   };
+
+//   return (
+//     <section>
+//       <button onClick={onSubmit}>Sign in with Google</button>
+//     </section>
+//   );
+// };
 
 // #################### App ####################
 function App() {
+  const [userName, setUserName] = useState(null);
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserName(user.displayName);
+        console.log("AuthStateChange: Signed in " + user.email);
+      } else {
+        setUserName(null);
+        console.log("AuthStateChange: Signed out");
+      }
+    });
+  }, []);
+
   return (
-    <section>
-      <SignIn />
+    <section className="h-screen flex flex-col gap-3 justify-center items-center">
+      <p>User: {userName ? userName : "Signed out"}</p>
+      <SignIn auth={auth} provider={provider} />
+      <SignOut auth={auth} />
     </section>
   );
 }
