@@ -98,8 +98,8 @@ function App() {
         <span className="py-3 md:hidden">{sidebarArrow}</span>
         {/* show / hide main content based on sidebar state */}
         <section
-          className={`flex max-md:${
-            sidebar ? "hidden" : ""
+          className={`flex ${
+            sidebar ? "max-md:hidden" : ""
           } justify-center items-center w-full h-full`}
         >
           {currentUser ? (
