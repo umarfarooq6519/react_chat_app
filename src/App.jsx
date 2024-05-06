@@ -54,10 +54,11 @@ function App() {
   const [sidebar, setSidebar] = useState(true);
   const sidebarState = sidebar ? "flex-1" : "hidden";
 
-  // sidebar is default false for below md devices
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 767px)");
-    setSidebar(!mediaQuery.matches); // Set initial sidebar state based on screen width
+    if (window.matchMedia) {
+      const mediaQuery = window.matchMedia("(max-width: 767px)");
+      setSidebar(!mediaQuery.matches); // Set initial sidebar state based on screen width
+    }
   }, []);
 
   const sidebarArrow = (
