@@ -54,6 +54,12 @@ function App() {
   const [sidebar, setSidebar] = useState(true);
   const sidebarState = sidebar ? "flex-1" : "hidden";
 
+  // sidebar is default false for below md devices
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    setSidebar(!mediaQuery.matches); // Set initial sidebar state based on screen width
+  }, []);
+
   const sidebarArrow = (
     <button
       type="button"
@@ -84,11 +90,12 @@ function App() {
 
       {/* chat content */}
       <div
-        className={`chat-content p-3 lg:px-5 rounded-box bg-base-100 text-base-content ${
+        className={`chat-content p-3 lg:px-5 rounded-xl bg-base-100 text-base-content ${
           sidebar ? "flex-0" : "flex-1"
         } md:flex-1 flex justify-center items-center h-full`}
       >
         <span className="py-3 md:hidden">{sidebarArrow}</span>
+        {/* show / hide main content based on sidebar state */}
         <section
           className={`flex max-md:${
             sidebar ? "hidden" : ""
