@@ -50,9 +50,31 @@ function App() {
     });
   }, []);
 
+  // sidebar hide / show state
+  const [sidebar, setSidebar] = useState(true);
+  const sidebarState = sidebar ? "flex-1" : "hidden";
+
+  const sidebarArrow = (
+    <button
+      type="button"
+      onClick={() => setSidebar(!sidebar)}
+      className={`w-fit`}
+    >
+      {sidebar ? (
+        <i className="fa-solid fa-chevron-left fa-lg"></i>
+      ) : (
+        <i className="fa-solid fa-chevron-right fa-lg"></i>
+      )}
+    </button>
+  );
+
   return (
     <section className="h-screen bg-neutral p-3 text-base-100 text-base flex gap-3 justify-center items-center">
-      <div className="sidebar flex-1 md:max-w-60 lg:max-w-xs h-full">
+      {/* sidebar content */}
+      <div
+        className={`sidebar ${sidebarState} md:max-w-60 lg:max-w-xs h-full `}
+      >
+        {/* <span className="flex justify-end">{sidebarArrow}</span> */}
         {currentUser ? (
           <SignedIn auth={auth} userPhoto={userPhoto} userName={userName} />
         ) : (
@@ -60,8 +82,26 @@ function App() {
         )}
       </div>
 
-      <div className="chat-content p-3 lg:px-5 rounded-xl bg-base-100 text-base-content flex-1 flex justify-center items-center h-full">
-        {currentUser ? <EmptyChat /> : "Please Login to continue."}
+      {/* chat content */}
+      <div
+        className={`chat-content p-3 lg:px-5 rounded-box bg-base-100 text-base-content ${
+          sidebar ? "flex-0" : "flex-1"
+        } md:flex-1 flex justify-center items-center h-full`}
+      >
+        <span className="py-3 md:hidden">{sidebarArrow}</span>
+        <section
+          className={`flex max-md:${
+            sidebar ? "hidden" : ""
+          } justify-center items-center w-full h-full`}
+        >
+          {currentUser ? (
+            <EmptyChat />
+          ) : (
+            <span className="text-center leading-relaxed w-full">
+              Please login to continue.
+            </span>
+          )}
+        </section>
       </div>
     </section>
   );
