@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  // signOut,
-  // signInWithPopup,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-} from "firebase/auth";
-import SignedOut from "./components/SignedOutPage";
-import SignedIn from "./components/SignedInPage";
-import EmptyChat from "./components/EmptyChat";
+import { getFirestore } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
+
+import { getAuth, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import SignInSidebar from "./components/SignInSidebar";
+import ChatSidebar from "./components/ChatSidebar";
+import ChatRoom from "./components/ChatRoom";
+// import ChatInput from "./components/elements/ChatInput";
+// import EmptyChat from "./components/EmptyChat";
 
 // Firebase Config
 const firebaseConfig = {
@@ -27,6 +26,8 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase Authentication
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+// Initialize Cloud Firestore
+const db = getFirestore(app);
 
 // #################### App ####################
 function App() {
@@ -76,22 +77,27 @@ function App() {
   );
 
   return (
-    <section className="h-screen bg-neutral p-3 text-base-100 text-base flex gap-3 justify-center items-center">
+    <section className="h-screen bg-[#24252D] p-4 text-base-100 text-base flex gap-3 justify-center items-center">
       {/* sidebar content */}
       <div
-        className={`sidebar ${sidebarState} md:max-w-60 lg:max-w-xs h-full `}
+        className={`sidebar ${sidebarState} py-1 md:max-w-60 lg:max-w-xs h-full `}
       >
         {/* <span className="flex justify-end">{sidebarArrow}</span> */}
         {currentUser ? (
-          <SignedIn auth={auth} userPhoto={userPhoto} userName={userName} />
+          <ChatSidebar
+            auth={auth}
+            userPhoto={userPhoto}
+            userName={userName}
+            firestore={db}
+          />
         ) : (
-          <SignedOut auth={auth} provider={provider} />
+          <SignInSidebar auth={auth} provider={provider} />
         )}
       </div>
 
       {/* chat content */}
       <div
-        className={`chat-content p-3 lg:px-5 rounded-xl bg-base-100 text-base-content ${
+        className={`chat-content p-3 lg:px-5 rounded-box bg-base-100 text-textdark ${
           sidebar ? "flex-0" : "flex-1"
         } md:flex-1 flex justify-center items-center h-full`}
       >
@@ -103,7 +109,7 @@ function App() {
           } justify-center items-center w-full h-full`}
         >
           {currentUser ? (
-            <EmptyChat />
+            <ChatRoom db={db} userPhoto={userPhoto} />
           ) : (
             <span className="text-center leading-relaxed w-full">
               Please login to continue.

@@ -1,6 +1,9 @@
-export default function ChatInput() {
+export default function ChatInput({ handleSubmit, msg, setMsg }) {
   return (
-    <div className="chat-input flex gap-3 lg:gap-5 w-full items-center">
+    <form
+      onSubmit={handleSubmit}
+      className="chat-input flex gap-3 lg:gap-5 w-full items-center"
+    >
       <span className="flex gap-3 lg:gap-5 items-center">
         <button type="button">
           <i className="fa-solid fa-image fa-lg"></i>
@@ -11,12 +14,14 @@ export default function ChatInput() {
       </span>
       <input
         type="text"
+        value={msg}
+        onChange={(e) => setMsg(e.target.value)}
         className="border border-neutral-content rounded-xl py-2.5 px-3 grow"
         placeholder="Start typing..."
       />
-      <button type="button">
+      <button type="submit">
         <i className="fa-solid fa-paper-plane fa-lg"></i>
       </button>
-    </div>
+    </form>
   );
 }
