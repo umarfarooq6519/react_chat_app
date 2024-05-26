@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { collection, onSnapshot } from "firebase/firestore";
 
 import { getAuth, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import SignInSidebar from "./components/SignInSidebar";
 import ChatSidebar from "./components/ChatSidebar";
 import ChatRoom from "./components/ChatRoom";
-// import ChatInput from "./components/elements/ChatInput";
 // import EmptyChat from "./components/EmptyChat";
 
 // Firebase Config
@@ -49,7 +47,7 @@ function App() {
         console.log("AuthStateChange: Signed out");
       }
     });
-  }, []);
+  });
 
   // sidebar hide / show state
   const [sidebar, setSidebar] = useState(true);
@@ -109,6 +107,7 @@ function App() {
           } justify-center items-center w-full h-full`}
         >
           {currentUser ? (
+            // <EmptyChat />
             <ChatRoom db={db} userPhoto={userPhoto} />
           ) : (
             <span className="text-center leading-relaxed w-full">

@@ -64,11 +64,29 @@ function ChatRoom({ db, userPhoto }) {
       ))}
     </span>
   );
+  const OutgoingMsgs = (
+    <span className="flex border items-end flex-col gap-4">
+      {sortedMessages.map((message) => (
+        <span key={message.uid} className="flex gap-3">
+          <span className="bg-gray-400 px-3 py-2 rounded-box" key={message.id}>
+            {message.text}
+          </span>
+          <img
+            key={message.uid}
+            src={message.photoURL}
+            alt="dp"
+            className="w-10 h-10 rounded-box"
+          />
+        </span>
+      ))}
+    </span>
+  );
 
   return (
-    <section className="border flex flex-col gap-4 h-full w-full justify-end items-start">
-      <div className="flex border justify-center items-center gap-2">
+    <section className="flex flex-col gap-4 h-full w-full justify-end items-start">
+      <div className="flex border-2 w-full h-full justify-between items-end gap-2">
         {IncomingMsgs}
+        {OutgoingMsgs}
       </div>
       <ChatInput handleSubmit={handleSubmit} msg={msg} setMsg={setMsg} />
     </section>
