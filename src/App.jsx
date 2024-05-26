@@ -33,6 +33,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [userName, setUserName] = useState(null);
   const [userPhoto, setUserPhoto] = useState(null);
+  const [uid, setUID] = useState(null);
 
   useEffect(() => {
     return onAuthStateChanged(auth, (user) => {
@@ -40,25 +41,31 @@ function App() {
         setCurrentUser(user);
         setUserName(user.displayName);
         setUserPhoto(user.photoURL);
-        console.log("AuthStateChange: Signed in " + user.email);
+        setUID(user.uid);
+        console.log(
+          "AuthStateChange: Signed in " + user.email + " UID: " + user.uid
+        );
       } else {
         setUserName(null);
         setCurrentUser(null);
+        setUID(null);
         console.log("AuthStateChange: Signed out");
       }
     });
-  });
+  }, []);
+
+  //checks if authenticated then loads users data
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     setCurrentUser(user);
+  //     setUserName(user.displayName);
+  //     setUserPhoto(user.photoURL);
+  //   }
+  // });
 
   // sidebar hide / show state
   const [sidebar, setSidebar] = useState(true);
   const sidebarState = sidebar ? "flex-1" : "hidden";
-
-  useEffect(() => {
-    if (window.matchMedia) {
-      const mediaQuery = window.matchMedia("(max-width: 767px)");
-      setSidebar(!mediaQuery.matches); // Set initial sidebar state based on screen width
-    }
-  }, []);
 
   const sidebarArrow = (
     <button
@@ -73,6 +80,33 @@ function App() {
       )}
     </button>
   );
+
+  function ChatSection() {
+    return (
+      <div
+        className={`chat-content p-3 lg:px-5 rounded-box bg-base-100 text-textdark ${
+          sidebar ? "flex-0" : "flex-1"
+        } md:flex-1 flex justify-center items-center h-full`}
+      >
+        <span className="py-3 md:hidden">{sidebarArrow}</span>
+        {/* show / hide main content based on sidebar state */}
+        <section
+          className={`flex ${
+            sidebar ? "max-md:hidden" : ""
+          } justify-center items-center w-full h-full`}
+        >
+          {currentUser ? (
+            // <EmptyChat />
+            <ChatRoom db={db} userPhoto={userPhoto} user={currentUser} />
+          ) : (
+            <span className="text-center leading-relaxed w-full">
+              Please login to continue.
+            </span>
+          )}
+        </section>
+      </div>
+    );
+  }
 
   return (
     <section className="h-screen bg-[#24252D] p-4 text-base-100 text-base flex gap-3 justify-center items-center">
@@ -92,30 +126,7 @@ function App() {
           <SignInSidebar auth={auth} provider={provider} />
         )}
       </div>
-
-      {/* chat content */}
-      <div
-        className={`chat-content p-3 lg:px-5 rounded-box bg-base-100 text-textdark ${
-          sidebar ? "flex-0" : "flex-1"
-        } md:flex-1 flex justify-center items-center h-full`}
-      >
-        <span className="py-3 md:hidden">{sidebarArrow}</span>
-        {/* show / hide main content based on sidebar state */}
-        <section
-          className={`flex ${
-            sidebar ? "max-md:hidden" : ""
-          } justify-center items-center w-full h-full`}
-        >
-          {currentUser ? (
-            // <EmptyChat />
-            <ChatRoom db={db} userPhoto={userPhoto} />
-          ) : (
-            <span className="text-center leading-relaxed w-full">
-              Please login to continue.
-            </span>
-          )}
-        </section>
-      </div>
+      <ChatSection />
     </section>
   );
 }
