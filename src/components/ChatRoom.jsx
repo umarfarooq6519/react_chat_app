@@ -103,7 +103,7 @@ function ChatRoom({ db, userPhoto, user }) {
   // );
 
   return (
-    <section className="flex flex-col gap-4 h-full w-full justify-end items-start">
+    <section className="flex overflow-y-scroll flex-col gap-4 h-full w-full justify-end items-start">
       <div className="flex w-full h-full justify-between items-end gap-2">
         {IncomingMsgs}
         {/* {OutgoingMsgs} */}

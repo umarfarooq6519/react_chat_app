@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 import { getAuth, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 import SignInSidebar from "./components/SignInSidebar";
@@ -36,32 +36,37 @@ function App() {
   const [uid, setUID] = useState(null);
 
   useEffect(() => {
-    return onAuthStateChanged(auth, (user) => {
+    return onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser(user);
         setUserName(user.displayName);
         setUserPhoto(user.photoURL);
         setUID(user.uid);
+        // Store user info in Firestore
+        const userDoc = doc(db, "users", user.uid);
+        await setDoc(
+          userDoc,
+          {
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+          },
+          { merge: true }
+        );
+
         console.log(
           "AuthStateChange: Signed in " + user.email + " UID: " + user.uid
         );
       } else {
         setUserName(null);
-        setCurrentUser(null);
         setUID(null);
+        setCurrentUser(null);
+        setUserPhoto(null);
         console.log("AuthStateChange: Signed out");
       }
     });
   }, []);
-
-  //checks if authenticated then loads users data
-  // onAuthStateChanged(auth, (user) => {
-  //   if (user) {
-  //     setCurrentUser(user);
-  //     setUserName(user.displayName);
-  //     setUserPhoto(user.photoURL);
-  //   }
-  // });
 
   // sidebar hide / show state
   const [sidebar, setSidebar] = useState(true);
@@ -109,7 +114,7 @@ function App() {
   }
 
   return (
-    <section className="h-screen bg-[#24252D] p-4 text-base-100 text-base flex gap-3 justify-center items-center">
+    <section className="h-screen bg-neutral p-4 text-base-100 text-base flex gap-3 justify-center items-center">
       {/* sidebar content */}
       <div
         className={`sidebar ${sidebarState} py-1 md:max-w-60 lg:max-w-xs h-full `}

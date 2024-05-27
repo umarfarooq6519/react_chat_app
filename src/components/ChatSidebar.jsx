@@ -28,9 +28,12 @@ function ChatSidebar({ auth, userPhoto, userName }) {
             ) : null}
             <h1 className="text-lg">{userName}</h1>
           </span>
-          <span>
-            <Button icon={<i className="fa-solid fa-pen-to-square"></i>} />
-          </span>
+          <button
+            onClick={onclick}
+            className={`hover:bg-base-300 duration-200 bg-base-100 text-textdark px-3 py-2 rounded-xl w-fit`}
+          >
+            <i className="fa-solid fa-pen-to-square"></i>
+          </button>
         </div>
 
         {/* sidebar buttons */}
