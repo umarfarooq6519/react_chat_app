@@ -125,7 +125,8 @@ function App() {
             auth={auth}
             userPhoto={userPhoto}
             userName={userName}
-            firestore={db}
+            db={db}
+            user={currentUser}
           />
         ) : (
           <SignInSidebar auth={auth} provider={provider} />
